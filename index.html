@@ -1,0 +1,557 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<title>Kuvaa itsesi Taitoukon kanssa</title>
+	<style type="text/css">
+	span {
+	display:none !important;
+	}
+	div {
+	display: none;
+	}
+	body
+	{
+	position: fixed; 
+	overflow-y: scroll;
+	width: 100%;
+	height: 100%;
+	}
+	.visible {
+	display:initial !important;
+	visibility: visible !important;
+	}
+
+	.error {
+	display: block !important;
+	margin-right: auto;
+	margin-left: auto;
+	width: 500px;
+	text-align: center;
+	height: 100px;
+	font-family: sans-serif;
+	position: fixed;
+	top: 10%;
+	left:0;
+	right: 0;
+	}
+
+	.button {
+	position: fixed;
+	bottom: 10px;
+	left: 0;
+	right: 0;
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+	width: 70px;
+	height: 70px;
+	font-size: 2em;
+	border-radius: 35px;
+	}
+
+	#video {
+	position: fixed;
+	top: 0;
+	z-index: -1;
+	}
+
+	.slider {
+	position: absolute;
+	top: 20vh;
+	font-size: 1.5em;
+	height: 300px;
+	width: 18px;
+	left: 20px;
+	transform: rotate(90);
+	writing-mode: bt-lr; /* IE */
+	-webkit-appearance: slider-vertical;
+	background: transparent;
+	border: none;
+	}
+
+	#textinput {
+	position: absolute;
+	display: block;
+	width: 100%;
+	top: 20px;
+	margin-left: auto;
+	margin-right: auto;
+	left: 0;
+	right: 0;
+	opacity: 0.5;
+	}
+
+	#y-slider {
+	left: 50px;
+	}
+
+	.button::-moz-focus-inner {
+	border: 0;
+	}
+
+	.imagepreview {
+	position: absolute;
+	width: 90%;
+	height: 90%;
+	margin: auto;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: #eee;
+	box-shadow: 5px 5px 5px #888888;
+	}
+
+	.imagepreview > img {
+	max-width: 100%;
+	max-height: 100%;
+	float: left;
+	display: block;
+	}
+
+	.hint {
+	position: fixed;
+	top: 15vh;
+	width: 300px;
+	left: 0;
+	right: 0;
+	margin-left: auto;
+	margin-right: auto;
+	color: white;
+	font-family: sans-serif;
+	font-size: 1.5em;
+	text-align: center;
+	text-shadow:
+	 -1px -1px 0 #000,  
+	1px -1px 0 #000,
+	-1px 1px 0 #000,
+	 1px 1px 0 #000;
+
+	}
+	#uploadText {
+	display: block;
+	margin: 0px auto;
+	font-family: sans-serif;
+	text-align: center;
+	position: absolute;
+	bottom: 15%;
+	left: 0;
+	right: 0;
+	font-size: 1em;
+	color:#fff;
+	text-shadow:
+		 -1px -1px 0 #000,  
+		1px -1px 0 #000,
+		-1px 1px 0 #000,
+		 1px 1px 0 #000;
+	}
+	a {
+	color: #fff;
+	}
+
+	button:focus {outline:0;}
+	</style>
+
+	<style type="text/css" id="frontcss">
+	video {
+	transform: scaleX(-1);
+	}
+
+	.a-canvas {
+	transform: scaleX(-1);
+	}
+
+	#scene {
+	transform: scaleY(-1);
+	}
+
+	</style>
+
+	<style type="text/css" id="videohide">
+	video {
+	display:none !important;
+	}
+	</style>
+
+	<!--<link rel="stylesheet" type="text/css" href="ball-spin-clockwise.min.css">-->
+
+	<script src="https://use.fontawesome.com/c1f2b59303.js"></script>
+	<script id="aframe" src="./aframe-v0.7.0.min.js"></script>
+	<script src="./FileSaver.min.js"></script>
+	<script src="./Blob.js"></script>
+	<script src="./canvas-toBlob.js"></script>
+	<script src="./html2canvas.min.js"></script>
+	<script src="./aframe-canvas.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<!-- include ar.js for A-Frame -->
+	<script type="text/javascript">
+	configuration = {facingMode: "user"}
+
+	var textVisible = true;
+	
+	console.log(configuration.facingMode)
+	window.mobilecheck = function() {
+	var check = false;
+	(function(a){if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0,4))) check = true;})(navigator.userAgent||navigator.vendor||window.opera);
+	return check;
+};
+
+	try {
+	parameters = location.search;
+	console.log("parameter: " + parameters)
+	if(parameters == "?front") {
+	facingModeConf = 'user';
+	} else {
+	facingModeConf = 'environment';
+	}
+	} catch(e) {
+	console.log(e)
+	facingModeConf = 'environment'
+	}
+
+	if(facingModeConf == "environment") {
+	document.head.removeChild(document.getElementById("frontcss"));
+	}
+	</script>
+	<script type="text/javascript">
+
+	var hasError = false;
+
+	taitoPos = {x:0, y:0, z:100}
+
+	streaming = 0
+	window.onload = function() {
+	var video = document.getElementById("video");
+
+	try {
+	navigator.getMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
+
+	navigator.getMedia({ video: { facingMode: {exact: facingModeConf} } }, function(stream)
+	{
+	if(navigator.mozGetUserMedia)
+		video.mozSrcObject = stream;
+	else
+	{
+		var vu = window.URL || window.webkitURL;
+		video.src = vu.createObjectURL(stream);
+	}
+	video.play();
+	}, function(error)
+	{
+	if(window.console)
+		console.error(error);
+	hasError = true;
+	if(mobilecheck()) {
+		errorCallback();
+	}
+	});
+	
+	$(document).ready(function(){
+	console.log("error:" + hasError)
+	console.log(mobilecheck());
+	if(!mobilecheck()) {
+	document.getElementById("error").innerHTML = "Tämä sivu toimii vain mobiililaitteilla.";
+		document.getElementById("scene").setAttribute("style", "display:none");
+		document.getElementById("body").setAttribute("style", "visibility:hidden");
+		document.getElementById("stuff").setAttribute("style","display: none !important;");
+		document.getElementById("aframe").remove();
+		document.getElementsByTagName("Video")[0].getTracks()[0].stop();
+	}
+	else {
+		document.getElementById("videohide").innerHTML = "";
+		document.getElementById("taitomodel").setAttribute("rotation","90 90 0");
+		if(facingModeConf == "environment") {
+		document.getElementById("taitomodel").setAttribute("rotation","270 90 0");
+		document.getElementById("bubble").setAttribute("rotation","0 -90 0");
+		document.getElementById("bubbletext").setAttribute("rotation", "0 -90 0");
+		document.getElementById("bubble").setAttribute("position","1 30 45")
+		document.getElementById("bubbletext").setAttribute("position","0 33 45")
+		}
+	}
+	});
+	} catch(e) {
+	alert(e)
+	errorCallback();
+	}
+
+	video.addEventListener('canplay', function(ev)
+	{
+	if(!streaming)
+	{
+	document.getElementById("textinput").disabled = false;
+	if(window.innerWidth > window.innerHeight) {
+		height = video.videoHeight / (video.videoWidth / window.innerWidth);
+		video.setAttribute('width', window.innerWidth);
+		video.setAttribute('height', height);
+		//video.setAttribute('style',"min-height:100%; width: 100%;")
+		video.setAttribute('style',"min-height:" + window.innerHeight + "px; width: " + window.innerWidth + "px;")
+	} else {
+		width = video.videoWidth / (video.videoHeight / window.innerHeight);
+		video.setAttribute('width', width);
+		video.setAttribute('height', window.innerHeight);
+		video.setAttribute('style',"height:" + window.innerHeight + "px; min-width: " + window.innerWidth + "px;")
+	}
+	$('#hint1').delay(5000).fadeOut(400, function() { $(this).remove()});
+	streaming = !0;
+	document.getElementById("cameraButton").disabled = false;
+	}
+
+	}, !1);
+
+	}
+
+	function errorCallback() {
+	document.getElementById("error").innerHTML = "Selaimesi tai käyttöjärjestelmäversiosi ei tue tätä sivua. Tämä saattaa johtua vanhentuneesta iOS-versiosta";
+	document.getElementById("scene").setAttribute("style", "display:none")
+	document.getElementById("body").setAttribute("style", "visibility:hidden");
+	document.getElementById("stuff").setAttribute("style","display: none !important;");
+	document.getElementById("videohide").innerHTML = "video { display:none !important; }"
+	document.getElementById("aframe").remove();
+	document.getElementsByTagName("Video")[0].getTracks()[0].stop();
+	}
+
+	</script>
+	<!--<script id="ar" src="./aframe-ar.js"></script>-->
+</head>
+<body  id="body" style='margin : 0px; overflow: hidden;'>
+
+	<a-scene id="scene" style="" id="scene" onload="function(){this.pointerlockEnabled = true}">
+	<a-assets>
+	<a-asset-item id="taitohymy-dae" src="./taito_hymy.dae"></a-asset-item>
+	<a-asset-item id="taito-dae" src="./taito.dae"></a-asset-item>
+	<a-asset-item id="kupla-dae" src="./speechbubble.dae"></a-asset-item>
+	</a-assets>
+	<a-entity position="100 0 00" id="taitoentity"  rotation="0 0 0" no-click-look-controls>
+	<a-entity collada-model="#taito-dae" id="taitomodel" position="0 0 0" scale="2 2 2" rotation="90 90 0"></a-entity>
+	<a-entity id="bubbletext" position="0 -32 -40" rotation="0 -90 180"
+	text="color: black; align: center; font:font.fnt; value: Kirjoita tähän; width: 100">
+	</a-entity>
+	<a-plane id="bubble" position="1 -30 -40" rotation="0 -90 180" width="50" height="50" transparent="true" src="./puhekupla.png"></a-plane>
+	<!--<a-entity collada-model="#taito-dae" id="taitomodel" position="0 0 0" scale="2 2 2" rotation="90 90 0"></a-entity>-->
+	</a-entity>
+
+	<a-camera listener></a-camera>
+	</a-scene>
+	<span class="visible error" id="error"></span>
+	<span id="stuff" class="visible">
+	<input class="slider" oninput="updateslider('z', this)" orient="vertical" id="z-slider" type="range" min="0" max="200">
+	<input class="slider" oninput="updateslider('y', this)" orient="vertical" id="y-slider" type="range" min="-100" max="100">
+	<textarea disabled id="textinput" onfocusout="updatetext(this)" style="max-height: 300px; resize: none" cols="40">Kirjoita tähän</textarea>
+
+	<button onclick="toggleText()" style="left: -200px" class="button"><i class="fa fa-comment" aria-hidden="true"></i></button>
+	<button onclick="takePhoto()" id="cameraButton" class="button" disabled="true"> <i class="fa fa-camera" aria-hidden="true"></i></button>
+	<button onclick="swapModel()" style="left: 200px" class="button"><i class="fa fa-smile-o" aria-hidden="true"></i></button>
+
+	<div class="imagepreview" id="imagepreview"><span onclick="closePreview()" class="visible" style="position: relative; display: block; float: left; max-height: 20px; font-size: 2em; margin-left: 15px; margin-top: 0px; margin-bottom: 18px; padding: 0"><i class="fa fa-times" aria-hidden="true"></i></span>
+	<span class="visible" id="uploadText"></span>
+	<button onclick="downloadImage()" id="downloadButton" class="button"><i class="fa fa-download" aria-hidden="true"></i></button>
+	<button onclick="uploadPhoto()" id="uploadButton" class="button" style="left: 200px"><i class="fa fa-cloud-upload" aria-hidden="true"></i></button>
+	<button onclick="link(this)" href="https://twitter.com/intent/tweet?text=Ota%20itsest%C3%A4si%20kuva%20Taito-ukon%20kanssa!%20https%3A%2F%2Ftaitoukko.taitodev.com%20%40TaitoUnited" id="twitterButton" class="button" style="left:200px; visibility: hidden;"><i class="fa fa-twitter" aria-hidden="true"></i></button>
+	<button onclick="link(this)" href="https%3A//taitoukko.taitodev.com" id="faceButton" class="button" style="left:-200px; visibility: hidden;"><i class="fa fa-facebook" aria-hidden="true"></i></button>
+	</div>
+
+	<div class="visible hint" id="hint1">Raahaa näkymää siirtääksesi Taitoukkoa</div>
+
+	<video id="video" autoplay></video>
+
+	<canvas class="hidden"></canvas>
+	</span>
+	<script type="text/javascript">
+
+	AFRAME.registerComponent('listener', {
+	tick: function () {
+	//console.log(this.el.getAttribute('rotation'));
+	}
+	});
+
+	
+	
+
+	/*if(window.innerHeight > window.innerWidth) {
+	document.getElementsByClassName("a-canvas")[0].width = document.getElementsByClassName("a-canvas")[0].height;
+	}
+	else {
+	document.getElementsByClassName("a-canvas")[0].height = document.getElementsByClassName("a-canvas")[0].width;
+	}*/
+	/*document.getElementById("ar").onload = function() {
+	document.getElementById("ar").setAttribute("src", "./aframe-ar.js");
+	}
+	script = document.getElementById("aframe");
+	script.onload = function() {
+	script.setAttribute("src","https://aframe.io/releases/0.7.0/aframe.min.js");
+	}*/
+
+	function post_to_url(path, params) {
+	$.ajax({
+	type: "POST",
+	url: path,
+	data: params,
+	dataType: "jsonp",
+	success: function(response){
+	return response;
+	}
+	});
+	}
+
+
+
+	function takePhoto() {
+	document.getElementById("cameraButton").disabled = true;
+	//var canvas1 = document.getElementById('scene').components.screenshot.getCanvas('perspective');
+	var scene = document.getElementsByTagName('a-scene')[0];
+
+	var canvas1 = document.getElementsByClassName('a-canvas')[0];
+	console.log("1");
+	var canvas = document.getElementsByClassName('hidden')[0];
+	console.log("2");
+	var video = document.getElementById("video");
+	console.log("got elements")
+	var width = video.videoWidth;
+	var height = video.videoHeight;
+	context = canvas.getContext('2d');
+	canvas.width = width;
+	canvas.height = height;
+	console.log("got canvas stuff")
+	if(facingModeConf == "user") {
+	canvas.getContext("2d").scale(-1,1)
+	canvas.getContext("2d").drawImage(video, 0, 0, width*-1, height);
+	} else {
+	canvas.getContext("2d").drawImage(video, 0, 0, width, height);
+	}
+	console.log("draw")
+	var vrimage = canvas1.toDataURL("image/png").replace("image/png", "image/octet-stream");
+	var img = new Image;
+	img.src = vrimage;
+	console.log("vrimage")
+	img.onload = function() {
+	console.log("image loaded")
+	if(facingModeConf == "user") {
+	canvas.getContext("2d").scale(1,-1);
+	canvas.getContext('2d').drawImage(img, 0, 0, img.width, img.height, 0, 0, (canvas.width) * -1, (canvas.height)* -1);
+	} else {
+	canvas.getContext('2d').drawImage(img, 0, 0, img.width, img.height, -35, 0, canvas.width + 35, canvas.height + 35);
+	}
+	//context.rect(50,50,100,100);
+
+	var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+	preview = document.getElementById("imagepreview");
+	preview.classList.add("visible");
+	var previewimage = new Image;
+	previewimage.id = "imgprew"
+	previewimage.src = image;
+	preview.appendChild(previewimage);
+	/*canvas.toBlob(function(blob) {
+	saveAs(blob, "snapshot.png");
+	});*/
+	};
+	}
+
+	taitohymy = false;
+
+	function swap() {
+	if(facingModeConf == "environment") {
+	window.location.search = '?front';
+	}
+	if(facingModeConf == "user") {
+	window.location.search = "";
+	}
+	}
+
+	function swapModel() {
+		element = document.getElementById("taitomodel");
+		if(taitohymy == false) {
+			document.getElementById("taitomodel").setAttribute("collada-model","#taitohymy-dae");
+			taitohymy = true;
+		}
+		else {
+			document.getElementById("taitomodel").setAttribute("collada-model","#taito-dae");
+			taitohymy = false;
+		}
+	}
+
+	function downloadImage() {
+	document.getElementById("cameraButton").disabled = false;
+	var canvas = document.getElementsByClassName('hidden')[0];
+	canvas.toBlob(function(blob) {
+	saveAs(blob, "photo-" + Date.now() + ".png");
+	});
+	}
+
+	function updateslider(axis, element) {
+	console.log(axis + " - " + element.value);
+	if(axis == "z") {
+	taitoPos.z = element.value
+	}
+	if(axis == "y") {
+	taitoPos.y = element.value;
+	}
+	document.getElementById("taitoentity").setAttribute("position",taitoPos.z + " " + taitoPos.y + " " + taitoPos.x)
+	}
+
+	function updatetext(element) {
+	originalText = document.getElementById("bubbletext");
+	originalText.getAttribute("text").value = element.value
+	newText = document.createElement("a-entity");
+	document.getElementById("taitoentity").appendChild(newText);
+	newText.setAttribute("id","bubbletext");
+	newText.setAttribute("text",originalText.getAttribute("text"))
+	newText.setAttribute("position",originalText.getAttribute("position"))
+	newText.setAttribute("rotation",originalText.getAttribute("rotation"))
+	originalText.parentNode.removeChild(originalText);
+	
+	}
+
+	function toggleText() {
+	if(textVisible) {
+	document.getElementById("bubble").setAttribute("visible","false");
+	document.getElementById("bubbletext").setAttribute("visible","false")
+	textVisible = !textVisible;
+	} else {
+	document.getElementById("bubble").setAttribute("visible","true");
+	document.getElementById("bubbletext").setAttribute("visible","true")
+	textVisible = !textVisible;
+	}
+	}
+
+	function closePreview() {
+		document.getElementById("cameraButton").disabled = false;
+		document.getElementById("imagepreview").classList.remove("visible");
+		document.getElementById("imgprew").parentNode.removeChild(document.getElementById("imgprew"));
+		$("#uploadButton").css("visibility","initial");
+		$("#twitterButton").css("visibility","hidden");
+		$("#faceButton").css("visibility","hidden");
+		document.getElementById("uploadText").innerHTML = "";
+	}
+
+	function link(element) {
+	var win = window.open(element.getAttribute("href"), '_blank');
+		win.focus();
+	}
+
+	function uploadPhoto() {
+	base64 = document.getElementById("imgprew").src;
+	document.getElementById("uploadButton").disabled = true;
+	document.getElementById("uploadButton").innerHTML = '<i class="fa fa-cog fa-spin fa-fw"></i>';
+	document.getElementById("uploadText").innerHTML = "Ladataan palvelimelle...";
+	//console.log(base64)
+	if(typeof base64 != undefined) {
+		console.log("started")
+		$.ajax({
+				type: 'POST',
+				url: 'upload.php',
+				data: {image:base64},
+			}).done(function(data) {
+				document.getElementById("uploadButton").disabled = false;
+				document.getElementById("uploadButton").innerHTML = '<i class="fa fa-cloud-upload" aria-hidden="true"></i>';
+				$("#uploadButton").css("visibility","hidden");
+				$("#twitterButton").css("visibility","initial");
+				$("#faceButton").css("visibility","initial");
+				document.getElementById("twitterButton").setAttribute("href","https://twitter.com/intent/tweet?hashtags=Taitoukko&text=" + encodeURI("https://taitoukko.taitodev.com/img/" + data + ".png @TaitoUnited"));
+				document.getElementById("faceButton").setAttribute("href","https://www.facebook.com/sharer/sharer.php?u=" + encodeURI("https://taitoukko.taitodev.com/img/" + data + ".png"));
+			document.getElementById("uploadText").innerHTML = "<a target='_blank' href='https://taitoukko.taitodev.com/img/" + data + ".png'>https://taitoukko.taitodev.com/img/" + data + ".png</a>";
+			});
+		}
+	}
+	</script>
+</body>
+</html>
